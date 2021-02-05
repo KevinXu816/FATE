@@ -46,7 +46,7 @@ Field Specification
 :component_name: key of a component. This name should end with a "_num" such as "_0", "_1" etc. And the number should start with 0. This is used to distinguish multiple same kind of components that may exist.
 
 :module: Specify which component use. This field should be one of the algorithm modules FATE supported.
-         The supported algorithms can be referred to `here <../../federatedml/README.rst>`__
+         The supported algorithms can be referred to `here <../../python/federatedml/README.rst>`__
 
     - input: There are two type of input, data and model.
 
@@ -232,7 +232,7 @@ How to get the output data of each component
 
 .. code-block:: bash
 
-   cd {your_fate_path}/fate_flow
+   cd {your_fate_path}/python/fate_flow
 
    python fate_flow_client.py -f component_output_data -j $jobid -p $party_id -r $role -cpn $component_name -o $output_dir
 
@@ -318,7 +318,7 @@ Pay attention to following points to enable predicting:
 
       .. code-block:: bash
           
-         python ${your_fate_install_path}/fate_flow/fate_flow_client.py -f job_config -j ${jobid} -r guest -p ${guest_partyid}  -o ${job_config_output_path}
+         python ${your_fate_install_path}/python/fate_flow/fate_flow_client.py -f job_config -j ${jobid} -r guest -p ${guest_partyid}  -o ${job_config_output_path}
        
       where
 
@@ -351,7 +351,7 @@ After complete your predict configuration, run the following command.
 
 .. code-block:: bash
    
-   python ${your_fate_install_path}/fate_flow/fate_flow_client.py -f submit_job -c ${predict_config}
+   python ${your_fate_install_path}/python/fate_flow/fate_flow_client.py -f submit_job -c ${predict_config}
 
 Step4: Check out Running State
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -373,7 +373,7 @@ You can also checkout job status by fate_flow in case without FATE_board install
 
 .. code-block:: bash
    
-   python ${your_fate_install_path}/fate_flow/fate_flow_client.py -f query_job -j {job_id} -r guest
+   python ${your_fate_install_path}/python/fate_flow/fate_flow_client.py -f query_job -j {job_id} -r guest
 
 
 Step5: Download Predicting Results
@@ -383,7 +383,7 @@ Once predict task finished, the first 100 records of predict result are availabl
 
 .. code-block:: bash
   
-  python ${your_fate_install_path}/fate_flow/fate_flow_client.py -f component_output_data -j ${job_id} -p ${party_id} -r ${role} -cpn ${component_name} -o ${predict_result_output_dir}
+  python ${your_fate_install_path}/python/fate_flow/fate_flow_client.py -f component_output_data -j ${job_id} -p ${party_id} -r ${role} -cpn ${component_name} -o ${predict_result_output_dir}
 
 where
 
@@ -392,27 +392,3 @@ where
 - ${role}: the role of current user. Please keep in mind that host users are not supposed to get predict results in heterogeneous algorithm.
 - ${component_name}: the component who has predict results
 - ${predict_result_output_dir}: the directory which use download the predict result to.
-
-
-use spark
----------
-
-1. deploy spark(yarn or standalone)
-2. export SPARK_HOME env before fate_flow service start(better adding env to service.sh)
-3. adjust runtime_conf, adjust job_parameters field:
-   
-   .. code-block:: json
-
-      {
-        "job_parameters": {
-            "backend": 1,
-            "spark_submit_config": {
-                "deploy-mode": "client",
-                "queue": "default",
-                "driver-memory": "1g",
-                "num-executors": 2,
-                "executor-memory": "1g",
-                "executor-cores": 1
-            }
-        }
-      }
